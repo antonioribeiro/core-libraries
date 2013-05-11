@@ -20,26 +20,26 @@ class Widget {
 	//// ----------- renderForm
 	
 	static public function renderForm($view, $variables = null) {
-		return View::make('templates.ace._partials.renderForm')
+		return View::make('templates.'.Config::get('app.template').'._partials.renderForm')
 						->with('bladeData', ['view' => $view, 'variables' => $variables]);
 	}
 
 	//// ----------- flatBox
 	
 	static public function flatBox($caption, $contents) {
-		return View::make('templates.ace._partials.flatBox')
+		return View::make('templates.'.Config::get('app.template').'._partials.flatBox')
 						->with('bladeData', ['caption' => $caption, 'contents' => $contents]);
 	}
 
 	//// ----------- Box
 
 	static public function boxToolsOpen() {
-		return View::make('templates.ace._partials.boxToolsOpen')
+		return View::make('templates.'.Config::get('app.template').'._partials.boxToolsOpen')
 						.'<!--box tools-->';
 	}
 
 	static public function boxToolsClose() {
-		return View::make('templates.ace._partials.boxToolsClose')
+		return View::make('templates.'.Config::get('app.template').'._partials.boxToolsClose')
 						.'<!--/box tools-->';
 	}
 
@@ -53,7 +53,7 @@ class Widget {
 			$extraTags = $r;
 		}
 
-		return View::make('templates.ace._partials.boxToolsButton')
+		return View::make('templates.'.Config::get('app.template').'._partials.boxToolsButton')
 						->with('bladeData', ['action' => $action, 'hint' => $hint, 'iconClasses' => $iconClasses, 'extraTags' => $extraTags])
 						.'<!--box tools-->';
 
@@ -67,56 +67,56 @@ class Widget {
 	}
 
 	static public function boxOpen($span = 12) {
-		return View::make('templates.ace._partials.boxOpen')
+		return View::make('templates.'.Config::get('app.template').'._partials.boxOpen')
 						->with('bladeData', ['span' => $span])
 						.'<!--/box body-->';
 	}
 
 	static public function boxClose() {
-		return View::make('templates.ace._partials.boxClose').'<!--/box body-->';
+		return View::make('templates.'.Config::get('app.template').'._partials.boxClose').'<!--/box body-->';
 	}
 
 	static public function boxHeaderOpen($caption = null) {
-		return View::make('templates.ace._partials.boxHeaderOpen')
+		return View::make('templates.'.Config::get('app.template').'._partials.boxHeaderOpen')
 						->with('bladeData', ['caption' => $caption])
 						.'<!--/box header-->';
 	}
 
 	static public function boxHeaderClose() {
-		return View::make('templates.ace._partials.boxHeaderClose')
+		return View::make('templates.'.Config::get('app.template').'._partials.boxHeaderClose')
 						.'<!--/box header-->';
 	}
 
 	static public function boxBodyOpen($caption = null) {
-		return View::make('templates.ace._partials.boxBodyOpen')
+		return View::make('templates.'.Config::get('app.template').'._partials.boxBodyOpen')
 						->with('bladeData', ['caption' => $caption])
 						.'<!--/box body-->';
 	}
 
 	static public function boxBodyClose() {
-		return View::make('templates.ace._partials.boxBodyClose')
+		return View::make('templates.'.Config::get('app.template').'._partials.boxBodyClose')
 						.'<!--/box body-->';
 	}
 
 	//// ----------- Table
 
 	static public function tableMasterHeaderOpen($header, $additionalTags = null) {
-		return View::make('templates.ace._partials.tableMasterHeaderOpen')
+		return View::make('templates.'.Config::get('app.template').'._partials.tableMasterHeaderOpen')
 						->with('bladeData', ['header' => $header, 'additionalTags' => $additionalTags]);
 
 	}
 	static public function tableMasterHeaderClose() {
-		return View::make('templates.ace._partials.tableMasterHeaderClose');
+		return View::make('templates.'.Config::get('app.template').'._partials.tableMasterHeaderClose');
 
 	}
 
 	static public function tableOpen($additionalTags = null) {
-		return View::make('templates.ace._partials.tableOpen')
+		return View::make('templates.'.Config::get('app.template').'._partials.tableOpen')
 						->with('bladeData', ['additionalTags' => $additionalTags]);
 	}
 
 	static public function tableClose() {
-		return View::make('templates.ace._partials.tableClose');
+		return View::make('templates.'.Config::get('app.template').'._partials.tableClose');
 	}
 
 	static public function tableBodyOpen() {
@@ -337,9 +337,13 @@ class Widget {
 
 	static public function input($column, $caption, $inputs)
 	{
-		$r = '<div class="control-group">'
-				.Forms::label($column, $caption, array('class'=>'control-label'))
-				.'<div class="controls">'
+		$r = '<div class="control-group">';
+		
+		if(!empty($caption)) {
+			$r .= Forms::label($column, $caption, array('class'=>'control-label'));
+		}
+				
+		$r .= '<div class="controls">'
 					.Widget::generateInputs($inputs)
 				.'</div>'
 			.'</div>';
@@ -387,13 +391,13 @@ class Widget {
 
 	static public function section($caption, $icon = null) 
 	{
-		return View::make('templates.ace._partials.sectionHeader')
+		return View::make('templates.'.Config::get('app.template').'._partials.sectionHeader')
 						->with('bladeData', ['sectionHeader' => $caption, 'sectionHeaderIcon' => $icon]);
 	}
 
  	static public function menuItem($url, $caption, $icon, $activeItem) {
 
-		return View::make('templates.ace._partials.menuItem')
+		return View::make('templates.'.Config::get('app.template').'._partials.menuItem')
 						->with('bladeData', ['url' => $url, 'caption' => $caption, 'icon' => $icon, 'activeItem' => Session::get('currentMenu') == $activeItem ? 'class="active"' : '' ]);
 
 	}
@@ -402,7 +406,7 @@ class Widget {
 	{
 		$buttons = Widget::generateButtons($buttons);
 
-		return View::make('templates.ace._partials.buttonWrapper')
+		return View::make('templates.'.Config::get('app.template').'._partials.buttonWrapper')
 						->with('bladeData', compact('class', 'buttons'));
 	}
 
@@ -414,7 +418,7 @@ class Widget {
 		{
 			if(isset($button) and $button)
 			{
-				$r .= View::make('templates.ace._partials.button')
+				$r .= View::make('templates.'.Config::get('app.template').'._partials.button')
 						->with('bladeData', $button);
 			}
 		}
