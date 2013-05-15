@@ -7,6 +7,8 @@ class BaseModel extends Eloquent {
 
 	public $errors;
 
+	private static $safeColumns = ['password_confirmation'];
+
 	protected $columns;
 
 	public function __construct(array $attributes = array()) {
@@ -19,22 +21,29 @@ class BaseModel extends Eloquent {
 		parent::boot();
 
 		static::saving(function ($data) {
-			// this is silly, but I'm having to remove the request path from the list of attributes
-			// 
-
-			foreach($data->attributes as $key => $value) {
-				if(!in_array($key, $data->getColumns())) {
-					Log::error("BaseModel: $key not found on table $data->table");
-					unset($data->attributes[$key]);
-				} else {
-					if(!$value) {
-						$data->attributes[$key] = null; /// we will store null for all of our unset data
-					}
-				}
-			}
+			$data->attributes = BaseModel::removeNonAttributesFromList($data->attributes, $data);
 
 			return $data->validate();
 		});
+	}
+
+	public static function removeNonAttributesFromList($attributes, $model) {
+		// This is silly, I know, but I'm having to remove the request path from the list of attributes and some attributes that may appear on Input but are not part of the Model attributes
+
+		if(is_string($model)) $model = new $model;
+
+		foreach($attributes as $key => $value) {
+			if(!in_array($key, $model->getColumns()) and !in_array($key, static::$safeColumns)) {
+				Log::error("BaseModel: $key not found on table $model->table");
+				unset($attributes[$key]);
+			} else {
+				if(!$value) {
+					$attributes[$key] = null; /// we will store null for all of our unset data
+				}
+			}
+		}
+		
+		return $attributes;		
 	}
 
 	public function validate() {

@@ -337,18 +337,10 @@ class Widget {
 
 	static public function input($column, $caption, $inputs)
 	{
-		$r = '<div class="control-group">';
-		
-		if(!empty($caption)) {
-			$r .= Forms::label($column, $caption, array('class'=>'control-label'));
-		}
-				
-		$r .= '<div class="controls">'
-					.Widget::generateInputs($inputs)
-				.'</div>'
-			.'</div>';
+		$inputs = Widget::generateInputs($inputs);
 
-		return 	$r;
+		return View::make('templates.'.Config::get('app.template').'._partials.inputWrapper')
+						->with('bladeData', compact('caption', 'inputs'));
 	}
 
 	static public function generateInputs($inputs) 
@@ -370,7 +362,7 @@ class Widget {
 			$r .= $iconType ? '<div class="input-'.$iconType.'">' : '';
 
 			if ($line['type'] == 'select') {
-				$r .= Form::select($line['column'], $line['value'], null,  $line['options']);
+				$r .= Form::select($line['column'], $line['value'], !empty($line['selected']) ? $line['selected'] : null,  $line['options']);
 			} else if ($line['type'] == 'password') {
 				$r .= Form::password($line['column'], $line['options']);	
 			} else {

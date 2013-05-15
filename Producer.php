@@ -143,4 +143,9 @@ class Producer {
 
 	}
 
+	public static function userGroups($firstItem) {
+
+		return Producer::generateArray(Group::whereNotNull('id')->orderBy('id')->get(), $firstItem, 'id', 'name');
+
+	}
 }
