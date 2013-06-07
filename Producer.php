@@ -9,9 +9,9 @@ class Producer {
 
 	public static function monthDays($firstItem = array()) {
 
-		if(isset($firstItem)) {
+		if (isset($firstItem)) {
 			$return[0] = $firstItem;
-		}		
+		}
 
 		foreach(explode('|', '1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31')
 					as $key => $value) {
@@ -24,9 +24,9 @@ class Producer {
 	}
 	
 	public static function months($firstItem) {
-		if(isset($firstItem)) {
+		if (isset($firstItem)) {
 			$return[] = $firstItem;
-		}		
+		}
 
 		foreach(array(1=>'Janeiro', 2=>'Fevereiro', 3=>'Março', 4=>'Abril', 5=>'Maio', 6=>'Junho', 7=>'Julho', 8=>'Agosto', 9=>'Setembro', 10=>'Outubro', 11=>'Novembro', 12=>'Dezembro')
 					as $key => $value) {
@@ -38,9 +38,9 @@ class Producer {
 	}
 
 	public static function years($firstItem) {
-		if(isset($firstItem)) {
+		if (isset($firstItem)) {
 			$return[] = $firstItem;
-		}		
+		}
 
 		for($x = 2014; $x>1899; $x--) {
 			$return[$x] = $x;
@@ -51,13 +51,13 @@ class Producer {
 
 	public static function states($firstItem, $mustBeInModel = null, $mustBeInColumn = null) {
 
-		if(isset($firstItem)) {
+		if (isset($firstItem)) {
 			$return[] = $firstItem;
-		}		
+		}
 
 		$states = new State;
 
-		if(isset($mustBeInModel)) {
+		if (isset($mustBeInModel)) {
 			$values = $mustBeInModel::distinct()->get(array($mustBeInColumn))->toArray();
 
 			$search = array();
@@ -67,7 +67,7 @@ class Producer {
 				}
 			}
 
-			if(count($search) > 0) {
+			if (count($search) > 0) {
 				$states = $states->whereIn('id',$search);	
 			}
 			
@@ -100,12 +100,12 @@ class Producer {
 
 		$r = array();
 
-		if(isset($firstItem)) {
+		if (!empty($firstItem)) {
 			$r[""] = $firstItem;
 		}
 
 		$p = strpos($name, '()');
-		if($p === false) {
+		if ($p === false) {
 			$method = false;
 		} else {
 			$method = true;
@@ -128,9 +128,9 @@ class Producer {
 
 	public static function model($model, $displayColumn, $filters, $firstItem) {
 
-		if(isset($firstItem)) {
+		if (isset($firstItem)) {
 			$return[] = $firstItem;
-		}		
+		}
 
 		$instance = new $model;
 
@@ -146,6 +146,56 @@ class Producer {
 	public static function userGroups($firstItem) {
 
 		return Producer::generateArray(Group::whereNotNull('id')->orderBy('id')->get(), $firstItem, 'id', 'name');
+
+	}
+
+	public static function categories($firstItem) {
+
+		$categories = Category::hierarchicalCategoryList();
+
+		return Producer::generateArray($categories, $firstItem, 'id', 'name');
+
+	}
+
+	public static function brands($firstItem) {
+
+		return Producer::generateArray(Brand::whereNotNull('id')->orderBy('id')->get(), $firstItem, 'id', 'name');
+
+	}
+
+	public static function units($firstItem) {
+
+		return Producer::generateArray(Unit::whereNotNull('id')->orderBy('id')->get(), $firstItem, 'id', 'name');
+
+	}
+
+	public static function seasons($firstItem) {
+
+		return Producer::generateArray(Season::whereNotNull('id')->orderBy('id')->get(), $firstItem, 'id', 'name');
+
+	}
+
+	public static function agesGroups($firstItem) {
+
+		return Producer::generateArray(AgeGroup::whereNotNull('id')->orderBy('id')->get(), $firstItem, 'id', 'name');
+
+	}
+
+	public static function sizes($firstItem) {
+
+		return Producer::generateArray(Size::whereNotNull('id')->orderBy('id')->get(), $firstItem, 'id', 'name');
+
+	}	
+
+	public static function colors($firstItem) {
+
+		return Producer::generateArray(Color::whereNotNull('id')->orderBy('id')->get(), $firstItem, 'id', 'name');
+
+	}	
+
+	public static function sizesGroups($firstItem) {
+
+		return Producer::generateArray(SizeGroup::whereNotNull('id')->orderBy('id')->get(), $firstItem, 'id', 'name');
 
 	}
 }

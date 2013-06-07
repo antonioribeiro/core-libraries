@@ -39,7 +39,7 @@ class Forms extends Form {
 			return $this->url->action($options[0], array_slice($options, 1));
 		}
 
-		if(is_null($action = $this->url->action($options)) and $this->url->isValidUrl($options)) {
+		if (is_null($action = $this->url->action($options)) and $this->url->isValidUrl($options)) {
 			$action = $options;
 		}
 

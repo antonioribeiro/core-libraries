@@ -42,18 +42,18 @@ class Inflector{
      */
     public static function pluralize($word){
         //Pertence a alguma exceção?
-        if(array_key_exists($word, self::$exceptions)):
+        if (array_key_exists($word, self::$exceptions)):
             return self::$exceptions[$word];
         //Não pertence a nenhuma exceção. Mas tem alguma regra?
         else:
             foreach(self::$rules as $singular=>$plural):
-                if(preg_match("({$singular}$)", $word))
+                if (preg_match("({$singular}$)", $word))
                     return preg_replace("({$singular}$)", $plural, $word);
             endforeach;
         endif;
         //Não pertence às exceções, nem às regras.
         //Se não terminar com "s", adiciono um.
-        if(substr($word, -1) !== 's')
+        if (substr($word, -1) !== 's')
             return $word . 's';
         return $word;
     }
@@ -66,19 +66,19 @@ class Inflector{
      */
     public static function singularize($word){
         //Pertence às exceçÃµes?
-        if(in_array($word, self::$exceptions)):
+        if (in_array($word, self::$exceptions)):
             $invert = array_flip(self::$exceptions);
             return $invert[$word];
         //Não é execeção.. Mas pertence a alguma regra?
         else:
             foreach(self::$rules as $singular => $plural):
-                if(preg_match("({$plural}$)",$word))
+                if (preg_match("({$plural}$)",$word))
                     return preg_replace("({$plural}$)", $singular, $word);
             endforeach;
         endif;
         //Nem é exceção, nem tem regra definida. 
         //Apaga a última somente se for um "s" no final
-	if(substr($word, -1) == 's')
+	if (substr($word, -1) == 's')
             return substr($word, 0, -1);
         return $word;
     }

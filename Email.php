@@ -4,17 +4,19 @@ class Email {
 
 	public static function queue($user, $view, $subject) {
 
-		$userId = $user->id;
+		Email::send($user, $view, $subject);
+		
+		// $userId = $user->id;
 
-		$data = compact('userId', 'view', 'subject');
+		// $data = compact('userId', 'view', 'subject');
 
-		Queue::push(function($job) use ($data) {
-			$user = Sentry::getUserProvider()->findById($data['userId']);
+		// Queue::push(function($job) use ($data) {
+		// 	$user = Sentry::getUserProvider()->findById($data['userId']);
 
-			Email::send($user, $data['view'], $data['subject']);
-		});
+		// 	Email::send($user, $data['view'], $data['subject']);
+		// });
 
-		Log::info("Mail [$subject] QUEUED to $user->email");
+		// Log::info("Mail [$subject] QUEUED to $user->email");
 
 	}
 

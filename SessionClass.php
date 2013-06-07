@@ -3,7 +3,7 @@
 class SessionClass {
 
 	static public function storeURL($url) {
-		if(Session::has('stored_urls')) {
+		if (Session::has('stored_urls')) {
 			$urls = Session::get('stored_urls');
 		} else {
 			$urls = array();

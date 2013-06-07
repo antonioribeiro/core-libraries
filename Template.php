@@ -4,11 +4,11 @@ class Template {
 
 	static public function sessionFlashMessages($type = 'bootstrap') {
 
-		if( $value = SessionClass::getValue('flashMessages') ) {
+		if ( $value = SessionClass::getValue('flashMessages') ) {
 			return Template::flashMessage($value, true, $type);
 		}
 	
-		if( $value = SessionClass::getValue('flashMessage') ) {
+		if ( $value = SessionClass::getValue('flashMessage') ) {
 			return Template::flashMessage($value, true, $type);
 		}
 
@@ -24,7 +24,7 @@ class Template {
 
 	static public function flashMessage($message, $canClose = true, $type = 'bootstrap') {
 		$message = explode('|', $message);
-		if(count($message) == 1) {
+		if (count($message) == 1) {
 			$kind = 'error';
 			$message = $message[0];
 		} else {
@@ -54,15 +54,19 @@ class Template {
 	static public function validationMessages($messages, $kind = 'error') {
 		$return = '';
 
-		foreach ($messages->all() as $message)
-		{
-		    $return .= View::make('site._partials.notification')
+		if (is_string($messages)) $messages = new Illuminate\Support\MessageBag(['0' => $messages]);
+		
+		foreach ($messages->all() as $message) $return .= static::renderMessageView($message, $kind);
+
+		return $return;
+	}
+
+	static public function renderMessageView($message, $kind)
+	{
+		return View::make('site._partials.notification')
 							->with('message', $message)
 							->with('canClose', true)
 							->with('kind', $kind);
-		}		
-
-		return $return;
 	}
 
 }

@@ -10,12 +10,16 @@ class Renderer {
 		//	example:
 		//		column:Nome:17%:name,column:E-mail:17%:email,method:Endereço:*:addressFull(),column:Telefones:17%:telephones,icons:Ações:17%|Editar:icon-pencil:#|Imprimir ficha:icon-print:#|Deletar:icon-trash:#
 		//		
+		//		
+
 		$captions = array();
-		foreach(explode(',',$columns) as $column) {
-			$s = explode(':',$column);
-			$captions[$s[1]] = $s[2];
+
+		foreach($columns as $key => $column) {
+			foreach($column as $key => $field) {
+				$captions[$field['caption']] = $field['size'];
+			}
 		}
- 
+
 		$table = 
 				Widget::tableOpen($additionalTags, 'Listagem geral') .
 					Widget::tableHeaderOpen() .
