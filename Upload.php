@@ -27,6 +27,8 @@ class Upload {
 					$file->save();
 					if (move_uploaded_file($pic['tmp_name'], $file->fullName)) 
 					{
+						chmod($file->fullName, 0644);
+						
 						Log::info('Generating all other resolutions...');
 						$file->generateAllResolutions();
 						$success = true;
