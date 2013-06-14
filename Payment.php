@@ -61,7 +61,7 @@ class Payment {
 
 		$this->service->setReference($this->order['orderId']);
 
-		$this->service->setRedirectURL( URL::route('pagseguro.transaction.accepted', $this->order['orderId']) );
+		$this->service->setRedirectURL( URL::route('pagseguro.transaction.accepted.get', $this->order['orderId']) );
 
 		try {
 			// $url = $this->service->register($this->credentials); 
