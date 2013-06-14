@@ -81,6 +81,16 @@ class Correios {
 
 	public function calcula()
 	{
-		return Tools::XML2Array( file_get_contents( $this->makeURL() ) );
+		try
+		{
+			$value = Tools::XML2Array( file_get_contents( $this->makeURL() ) );
+		}
+		catch (\Exception $e)
+		{
+			$value = -1;
+			Log::info('CORREIOS - Service Unavailable');
+		}
+
+		return $value;
 	}
 }
