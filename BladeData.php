@@ -35,7 +35,6 @@ class BladeData {
 		return static::getBladeData();
 	}
 
-
 	public static function produceFormData($model, $disabled, $readonly, $parent_id = null)
 	{
 		BladeData::put('model', $model);
@@ -75,4 +74,31 @@ class BladeData {
 
 		BladeData::put('validateFirstAPIUrl', URL::to('api/validate/'.BladeData::get('model')->class));		
 	}
+
+	public static function produceUserAddresses($user, $disabled, $enabled)
+	{
+		$addresses = $user->addresses->toArray();
+
+		if(!$disabled)
+		{
+			foreach((new UserAddress)->getColumns() as $column)
+			{
+				$address[$column] = '';
+			}
+
+			unset($address['created_at']);
+			unset($address['updated_at']);
+
+			$address['id'] = 0; /// will be included if filled
+
+			$addresses[] = $address;
+		}
+
+		$user->fill(['address' => $addresses]);
+
+		BladeData::put('user-addresses', $addresses);
+
+		return $user;
+	}
+
 }

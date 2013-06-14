@@ -53,6 +53,8 @@ class Payment {
 			'BRA'
 		); 
 
+		$this->service->setRedirectURL( URL::route('pagseguro.payment.redirect',$this->order['orderId']) );
+
 		$this->service->setCurrency("BRL");
 
 		$this->service->setShippingType(3); // not specified
