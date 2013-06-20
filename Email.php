@@ -2,9 +2,9 @@
 
 class Email {
 
-	public static function queue($user, $view, $subject) {
+	public static function queue($user, $view, $subject, $viewData = [], $cc = null, $bcc = null) {
 
-		Email::send($user, $view, $subject);
+		Email::send($user, $view, $subject, $viewData = [], $cc, $bcc);
 		
 		// $userId = $user->id;
 
@@ -20,10 +20,24 @@ class Email {
 
 	}
 
-	public static function send($user, $view, $subject) {
+	public static function send($user, $view, $subject, $viewData = [], $cc = null, $bcc = null) {
 
-		Mail::send($view, ['user' => $user], function($m) use ($user, $subject) {
-			$m->to($user->email)->subject($subject);
+		Mail::send($view, array_merge(['user' => $user], $viewData), function($message) use ($user, $subject, $cc, $bcc) {
+
+			$message->to($user->email);
+
+			$message->subject($subject);
+
+			if(!empty($cc))
+			{
+				$message->cc($cc->email);	
+			}
+
+			if(!empty($bcc))
+			{
+				$message->bcc($bcc->email);
+			}
+			
 		});
 
 		Log::info("Mail [$subject] SENT to $user->email");
