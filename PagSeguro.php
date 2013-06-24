@@ -3,7 +3,19 @@
 require_once __DIR__."/../../vendor/pagseguro/source/PagSeguroLibrary/PagSeguroLibrary.php";
 
 class PagSeguro {
+
+	private $paymentData;
+
+	public function __construct($data = null)
+	{
+		$this->setOrder($data);
+	}
 	
+	public function setOrder($data)
+	{
+		$this->paymentData = $data;
+	}
+
 	public static function credentials()
 	{
 		return new PagSeguroAccountCredentials(  
@@ -25,49 +37,54 @@ class PagSeguro {
 																);
 	}
 
-	public static function getPaymentURL($order)
+	public function getPaymentURL()
 	{
 		$request = new PagSeguroPaymentRequest;
 
-		foreach($order['items'] as $item) {
+		foreach($this->paymentData['items'] as $item) {
 			$request->addItem($item['id'], $item['name'], $item['quantity'], $item['price']);
 		}
 
 		$request->setSender(
-			$order['buyerName'],
-			$order['buyerEmail'],
-			$order['buyerTelephoneArea'],
-			$order['buyerTelephone']
+			$this->paymentData['buyerName'],
+			$this->paymentData['buyerEmail'],
+			$this->paymentData['buyerTelephoneArea'],
+			$this->paymentData['buyerTelephone']
 		);
 
 		$request->setShippingAddress(
-			$order['buyerAddress']['zipCode'],
-			$order['buyerAddress']['street'],
-			$order['buyerAddress']['number'],
-			$order['buyerAddress']['additionalInfo'],
-			$order['buyerAddress']['neighborhood'],
-			$order['buyerAddress']['city'],
-			$order['buyerAddress']['state'],
+			$this->paymentData['buyerAddress']['zipCode'],
+			$this->paymentData['buyerAddress']['street'],
+			$this->paymentData['buyerAddress']['number'],
+			$this->paymentData['buyerAddress']['additionalInfo'],
+			$this->paymentData['buyerAddress']['neighborhood'],
+			$this->paymentData['buyerAddress']['city'],
+			$this->paymentData['buyerAddress']['state'],
 			'BRA'
-		); 
+		);
 
-		$request->setRedirectURL( URL::route('pagseguro.payment.redirect',$order['orderId']) );
+		$request->setRedirectURL( URL::route('pagseguro.payment.redirect',$this->paymentData['orderId']) );
 
 		$request->setCurrency("BRL");
 
 		$request->setShippingType(3); // not specified
 
-		$request->setReference($order['orderId']);
+		$request->setReference($this->paymentData['orderId']);
 
-		$request->setRedirectURL( URL::route('pagseguro.transaction.accepted.get', $order['orderId']) );
+		$request->setRedirectURL( URL::route('pagseguro.transaction.accepted.get', $this->paymentData['orderId']) );
 
 		try 
 		{
-			$url = $request->register(static::credentials()); 
+			if (App::environment() === 'development') 
+			{
+				$url = 'https://pagseguro.uol.com.br/checkout/sender-data.jhtml?senderPhone=25563164&senderAreaCode=21&senderName=Antonio%20Carlos%20Ribeiro&t=fc0d1591966a69898ee36e935da48fbd';
+			}
+			else
+			{
+				$url = $request->register( static::credentials() ); 
+			}
 
-			// $url = 'https://pagseguro.uol.com.br/checkout/sender-data.jhtml?senderPhone=25563164&senderAreaCode=21&senderName=Antonio%20Carlos%20Ribeiro&t=fc0d1591966a69898ee36e935da48fbd';
-
-			Log::info('PAGSEGURO - TRANSACTION - '.$url);
+			Log::info('PAGSEGURO - PAYMENT URL - '.$url);
 
 			return $url;
 		} 

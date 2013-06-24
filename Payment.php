@@ -2,24 +2,13 @@
 
 class Payment {
 
-	private $service;
-	public $order;
+	public $service;
 
-	public $errors;
-
-	public function __construct($order = null)
+	public function __construct($paymentData)
 	{
-		PagSeguroLibrary::init();
 
-		if(!empty($order))
-		{
-			$this->setOrder($order);
-		}
-	}
-
-	public function setOrder($order)
-	{
-		$this->order = $order ;
+		$this->service = new PagSeguro($paymentData);
+		
 	}
 
 }
