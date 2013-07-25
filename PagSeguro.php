@@ -77,7 +77,7 @@ class PagSeguro {
 		{
 			if (App::environment() === 'development') 
 			{
-				$url = 'https://pagseguro.uol.com.br/checkout/sender-data.jhtml?senderPhone=25563164&senderAreaCode=21&senderName=Antonio%20Carlos%20Ribeiro&t=fc0d1591966a69898ee36e935da48fbd';
+				$url = 'https://pagseguro.uol.com.br/v2/checkout/payment.html?code=C4BD7A9990902D6EE4821FB7DCFF47E6';
 			}
 			else
 			{
