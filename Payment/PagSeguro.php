@@ -1,19 +1,34 @@
 <?php
 
-require_once __DIR__."/../../vendor/pagseguro/source/PagSeguroLibrary/PagSeguroLibrary.php";
+require_once __DIR__."/../../../vendor/pagseguro/source/PagSeguroLibrary/PagSeguroLibrary.php";
 
-class PagSeguro {
+class PagSeguro implements PaymentGatewayInterface {
 
 	private $paymentData;
 
-	public function __construct($data = null)
+	public function __construct(array $paymentData)
 	{
-		$this->setOrder($data);
+		$this->paymentData = $paymentData;
 	}
 	
-	public function setOrder($data)
+	public function pay()
 	{
-		$this->paymentData = $data;
+		return 'paid';
+	}
+
+	public function processNotification($notification)
+	{
+		return 'notified';
+	}
+
+	public function getPaymentStyle()
+	{
+		return 'url';
+	}
+
+	public function getPaymentData()
+	{
+		return ['data'];
 	}
 
 	public static function credentials()
