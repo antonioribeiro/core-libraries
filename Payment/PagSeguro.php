@@ -4,16 +4,32 @@ require_once __DIR__."/../../../vendor/pagseguro/source/PagSeguroLibrary/PagSegu
 
 class PagSeguro implements PaymentGatewayInterface {
 
+	private $request;
 	private $paymentData;
 
-	public function __construct(array $paymentData)
+	public $errors = [];
+	public $log = [];
+	public $paymentURL;
+	public $redirectURL = null; /// URL::route('pagseguro.payment.redirect',$this->paymentData['orderId'])
+	public $email;
+	public $token; // Config::get('app.pagseguro.email'), Config::get('app.pagseguro.token')  
+
+	public function __construct(array $paymentData, PagSeguroPaymentRequest $request)
 	{
 		$this->paymentData = $paymentData;
+		$this->request = $request;
 	}
 	
 	public function pay()
 	{
-		return 'paid';
+		$this->clearErrors();
+
+		if ( ! $this->checkAllData() )
+		{
+			return false;
+		}
+
+		return $this->buildPaymentURL();
 	}
 
 	public function processNotification($notification)
@@ -28,46 +44,106 @@ class PagSeguro implements PaymentGatewayInterface {
 
 	public function getPaymentData()
 	{
-		return ['data'];
+		return $this->paymentData;
 	}
 
-	public static function credentials()
+	public function setPaymentData($data)
 	{
+		$this->paymentData = $data;
+	}
+
+	public function credentials()
+	{
+		if( empty($this->email) or empty($this->token) )
+		{
+			$this->throwException('credentials cannot be blank.');
+		}
+
 		return new PagSeguroAccountCredentials(  
-												Config::get('app.pagseguro.email'),   
-												Config::get('app.pagseguro.token')  
+												$this->email,   
+												$this->token  
 											);		
 	}
 
-	public static function getNotification($notificationCode)  
+	private function clearErrors()
 	{
-		return PagSeguroNotificationService::checkTransaction(static::credentials(), $notificationCode);
+		$this->errors = [];
 	}
 
-	public static function getTransaction($transactionId)  
+	private function checkCredentials()
+	{
+		if( empty($this->email) or empty($this->token) )
+		{
+			$this->errors[] = 'credentials are not set.';
+
+			return false;
+		}
+
+		return true;
+	}
+
+	public function getNotification($notificationCode)  
+	{
+		return PagSeguroNotificationService::checkTransaction($this->credentials(), $notificationCode);
+	}
+
+	public function getTransaction($transactionId)  
 	{
 		return PagSeguroTransactionSearchService::searchByCode(  
-	    															static::credentials(),  
+	    															$this->credentials(),  
 	    															$transactionId
 																);
 	}
 
-	public function getPaymentURL()
+	private function checkRedirectURL()
 	{
-		$request = new PagSeguroPaymentRequest;
+		if( empty($this->redirectURL) )
+		{
+			$this->errors[] = 'redirectURL property cannot be empty.';
 
-		foreach($this->paymentData['items'] as $item) {
-			$request->addItem($item['id'], $item['name'], $item['quantity'], $item['price']);
+			return false;
 		}
 
-		$request->setSender(
+		return true;
+	}
+
+	public function convertDate($date)
+	{
+		return Carbon\Carbon::createFromFormat("Y-m-d\TH:i:s.uP", $date);
+	}
+
+	private function verifyAndSetPaymentData()
+	{
+		if( ! isset($this->paymentData['items']) )
+		{
+			$this->errors[] = 'invalid payment data.';
+			return false;
+		}
+
+		if( ! isset($this->paymentData['orderId']) )
+		{
+			$this->errors[] = 'invalid payment data.';
+			return false;
+		}
+
+		if( ! array_key_exists('items', $this->paymentData) or ! array_key_exists('orderId', $this->paymentData) )
+		{
+			$this->errors[] = 'invalid payment data.';
+			return false;
+		}
+
+		foreach($this->paymentData['items'] as $item) {
+			$this->request->addItem($item['id'], $item['name'], $item['quantity'], $item['price']);
+		}
+
+		$this->request->setSender(
 			$this->paymentData['buyerName'],
 			$this->paymentData['buyerEmail'],
 			$this->paymentData['buyerTelephoneArea'],
 			$this->paymentData['buyerTelephone']
 		);
 
-		$request->setShippingAddress(
+		$this->request->setShippingAddress(
 			$this->paymentData['buyerAddress']['zipCode'],
 			$this->paymentData['buyerAddress']['street'],
 			$this->paymentData['buyerAddress']['number'],
@@ -78,16 +154,36 @@ class PagSeguro implements PaymentGatewayInterface {
 			'BRA'
 		);
 
-		$request->setRedirectURL( URL::route('pagseguro.payment.redirect',$this->paymentData['orderId']) );
+		$this->request->setCurrency("BRL");
 
-		$request->setCurrency("BRL");
+		$this->request->setShippingType(3); // not specified
 
-		$request->setShippingType(3); // not specified
+		$this->request->setReference($this->paymentData['orderId']);
 
-		$request->setReference($this->paymentData['orderId']);
+		$this->request->setRedirectURL( $this->redirectURL );
 
-		$request->setRedirectURL( URL::route('pagseguro.redirected.from.payment.get', $this->paymentData['orderId']) );
+		return true;	
+	}
 
+	private function checkAllData()
+	{
+		if ( ! $this->checkCredentials() ) {
+			return false;
+		}
+
+		if ( ! $this->checkRedirectURL() ) {
+			return false;
+		}
+
+		if ( ! $this->verifyAndSetPaymentData() ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public function buildPaymentURL()
+	{
 		try 
 		{
 			if (App::environment() === 'development') 
@@ -96,29 +192,29 @@ class PagSeguro implements PaymentGatewayInterface {
 			}
 			else
 			{
-				$url = $request->register( static::credentials() ); 
+				$url = $this->request->register( $this->credentials() ); 
 			}
 
-			Log::info('PAGSEGURO - PAYMENT URL - '.$url);
+			$this->log['info'][] = 'PAGSEGURO - PAYMENT URL - '.$url;
 
-			return $url;
+			$this->paymentURL = $url;
 		} 
 		catch (PagSeguroServiceException $e) 
 		{
-			$errors = 'Erro ao efetuar transação no PagSeguro.';
+			$this->errors[] = 'Erro ao efetuar transação no PagSeguro.';
 
-			Log::error('PAGSEGURO - HTTP STATUS - ' . $e->getHttpStatus());
+			$this->log['error'][] = 'PAGSEGURO - HTTP STATUS - ' . $e->getHttpStatus();
 
 			foreach ($e->getErrors() as $key => $error) {  
 				Log::error('PAGSEGURO - ERROR - ' . $error->getCode() . ' - ' . $error->getMessage());
 			}
 
+			$this->paymentURL = 'error';
+
 			return false;
 		}
+
+		return true;
 	}
 
-	public static function convertDate($date)
-	{
-		return Carbon\Carbon::createFromFormat("Y-m-d\TH:i:s.uP", $date);
-	}
 }
