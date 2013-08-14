@@ -26,7 +26,6 @@ class Cielo {
 
 		$this->createCielo();
 		$this->configure();
-		$this->createCard();
 		$this->createTransaction();
 	}
 
@@ -37,7 +36,9 @@ class Cielo {
 
 	public function requestTransaction()
 	{
-		$this->request = $cielo->iniciaTransacao($this->transaction, $this->card, $this->configuration->returnUrl);
+		$this->createCard();
+
+		$this->request = $this->client->iniciaTransacao($this->transaction, $this->card, $this->configuration->returnUrl);
 	}
 
 	protected function createCielo()
@@ -76,6 +77,16 @@ class Cielo {
 		$this->card->setIndicador( $this->paymentData->cardSecurityCodeInfo );
 		$this->card->setNomePortador( $this->paymentData->cardPrintedName );
 		$this->card->setValidade( $this->paymentData->cardExpirationDate );		
+	}
+
+	public function getRequestData()
+	{
+		return $this->request->getEnvio();
+	}
+
+	public function getResponseData()
+	{
+		return $this->request->getResposta();
 	}
 
 }
