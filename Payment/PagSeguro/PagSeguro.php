@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__."/../../../../../vendor/pagseguro/source/PagSeguroLibrary/PagSeguroLibrary.php";
+require_once __DIR__."/../../../../vendor/pagseguro/source/PagSeguroLibrary/PagSeguroLibrary.php";
 
 class PagSeguro implements PaymentGatewayInterface {
 
