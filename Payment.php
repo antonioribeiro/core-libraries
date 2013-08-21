@@ -1,6 +1,6 @@
 <?php
 
-class Payment {
+class PaymentOLD {
 
 	public $service;
 
@@ -22,4 +22,5 @@ class Payment {
 // [2013-06-14 11:15:23] log.INFO: PAGSEGURO - NOTIFICATION - 186.234.16.9 - {"notificationCode":"5C1D4C-16A801A80173-6994F5BFB626-6E6745","notificationType":"transaction","\/pagseguro\/notification":""} [] []
 // [2013-06-14 13:17:22] log.INFO: PAGSEGURO - NOTIFICATION - 186.234.16.8 - {"notificationCode":"5C1D4C-16A801A80173-6994F5BFB626-6E6745","notificationType":"transaction","\/pagseguro\/notification":""} [] []
 // [2013-06-14 15:18:13] log.INFO: PAGSEGURO - NOTIFICATION - 186.234.16.8 - {"notificationCode":"5C1D4C-16A801A80173-6994F5BFB626-6E6745","notificationType":"transaction","\/pagseguro\/notification":""} [] []
+// [2013-07-24 18:39:35] log.INFO: PAGSEGURO - NOTIFICATION CODE - 186.234.16.8 - {"notificationCode":"3A381A-4FE2C0E2C006-177465FF9ACA-E960C7","notificationType":"transaction","\/pagseguro\/notification":""} [] []
 
