@@ -322,7 +322,7 @@ Class Tools {
 		$s = str_replace('May', 'Maio', $s);
 		$s = str_replace('June', 'Junho', $s);
 		$s = str_replace('July', 'Julho', $s);
-		$s = str_replace('August', 'Augosto', $s);
+		$s = str_replace('August', 'Agosto', $s);
 		$s = str_replace('September', 'Setembro', $s);
 		$s = str_replace('October', 'Outubro', $s);
 		$s = str_replace('November', 'Novembro', $s);
