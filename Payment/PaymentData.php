@@ -17,6 +17,8 @@ class PaymentData {
 	public $cardExpirationDate;
 	public $cardSecurityCodeInfo; /// 0 = Not Informed --- 1 = Will Send Security Code --- 2 = Illegible
 	public $cardSecurityCode;
+	public $cardToken;
+	public $autorizationKind = 3; /// 3 (autorizar sem passar por autenticação – válido somente para crédito)
 
 	public function getTid()
 	{
