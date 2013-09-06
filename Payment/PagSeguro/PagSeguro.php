@@ -54,7 +54,7 @@ class PagSeguro implements PaymentGatewayInterface {
 
 	public function credentials()
 	{
-		if( empty($this->email) or empty($this->token) )
+		if ( empty($this->email) or empty($this->token) )
 		{
 			$this->throwException('credentials cannot be blank.');
 		}
@@ -72,7 +72,7 @@ class PagSeguro implements PaymentGatewayInterface {
 
 	private function checkCredentials()
 	{
-		if( empty($this->email) or empty($this->token) )
+		if ( empty($this->email) or empty($this->token) )
 		{
 			$this->errors[] = 'credentials are not set.';
 
@@ -97,7 +97,7 @@ class PagSeguro implements PaymentGatewayInterface {
 
 	private function checkRedirectURL()
 	{
-		if( empty($this->redirectURL) )
+		if ( empty($this->redirectURL) )
 		{
 			$this->errors[] = 'redirectURL property cannot be empty.';
 
@@ -114,19 +114,19 @@ class PagSeguro implements PaymentGatewayInterface {
 
 	private function verifyAndSetPaymentData()
 	{
-		if( ! isset($this->paymentData['items']) )
+		if ( ! isset($this->paymentData['items']) )
 		{
 			$this->errors[] = 'invalid payment data.';
 			return false;
 		}
 
-		if( ! isset($this->paymentData['orderId']) )
+		if ( ! isset($this->paymentData['orderId']) )
 		{
 			$this->errors[] = 'invalid payment data.';
 			return false;
 		}
 
-		if( ! array_key_exists('items', $this->paymentData) or ! array_key_exists('orderId', $this->paymentData) )
+		if ( ! array_key_exists('items', $this->paymentData) or ! array_key_exists('orderId', $this->paymentData) )
 		{
 			$this->errors[] = 'invalid payment data.';
 			return false;

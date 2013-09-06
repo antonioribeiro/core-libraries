@@ -44,7 +44,7 @@ Class Tools {
 			echo '<pre>'.var_dump($x).'</pre>';
 		}
 
-		if($die) die;
+		if ($die) die;
 	}
 
 	public static function queryLog()
@@ -182,7 +182,7 @@ Class Tools {
 	}
 
 	static public function date($date) {
-		if($date)
+		if ($date)
 		{
 			$date = new ExpressiveDate($date);
 			$date->setDefaultDateFormat('d.m.Y');
@@ -191,7 +191,7 @@ Class Tools {
 	}
 
 	static public function time($date) {
-		if($date)
+		if ($date)
 		{
 			$d = new ExpressiveDate($date);
 			$d->setDefaultDateFormat('H:i');
@@ -200,7 +200,7 @@ Class Tools {
 	}
 
 	static public function format($date, $format) {
-		if($date)
+		if ($date)
 		{
 			$d = new ExpressiveDate($date);
 			$d->setDefaultDateFormat($format);
@@ -213,7 +213,7 @@ Class Tools {
 	}
 
 	static public function dayOfWeek($date) {
-		if($date)
+		if ($date)
 		{
 			$date = new ExpressiveDate($date);
 			$date->setDefaultDateFormat('H:i');
@@ -241,10 +241,10 @@ Class Tools {
 	}
 
 	static public function diffInSeconds($date1,$date2) {
-		if($date1)
+		if ($date1)
 		{
 			$date1 = new ExpressiveDate($date1);
-			if($date2) {
+			if ($date2) {
 				$date2 = new ExpressiveDate($date2);
 			} else {
 				$date2 = new ExpressiveDate;
@@ -305,7 +305,7 @@ Class Tools {
 
 	static public function getDay($date) 
 	{ 
-		if($date)
+		if ($date)
 		{
 			$date = new Carbon($date);
 			return $date->day;
@@ -332,14 +332,14 @@ Class Tools {
 	}
 
 	static function inIpRange($ip_one, $ip_two=false){ 
-		if($ip_two===false){ 
-			if($ip_one==$_SERVER['REMOTE_ADDR']){ 
+		if ($ip_two===false){ 
+			if ($ip_one==$_SERVER['REMOTE_ADDR']){ 
 				$ip=true; 
 			}else{ 
 				$ip=false; 
 			} 
 		}else{ 
-			if(ip2long($ip_one)<=ip2long($_SERVER['REMOTE_ADDR']) && ip2long($ip_two)>=ip2long($_SERVER['REMOTE_ADDR'])){ 
+			if (ip2long($ip_one)<=ip2long($_SERVER['REMOTE_ADDR']) && ip2long($ip_two)>=ip2long($_SERVER['REMOTE_ADDR'])){ 
 				$ip=true; 
 			}else{ 
 				$ip=false; 

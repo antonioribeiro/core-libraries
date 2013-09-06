@@ -28,12 +28,12 @@ class Email {
 
 			$message->subject($subject);
 
-			if(!empty($cc))
+			if ( !empty($cc))
 			{
 				$message->cc($cc->email);	
 			}
 
-			if(!empty($bcc))
+			if ( !empty($bcc))
 			{
 				$message->bcc($bcc->email);
 			}
