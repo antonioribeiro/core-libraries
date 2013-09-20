@@ -79,7 +79,7 @@ class BladeData {
 	{
 		$addresses = $user->addresses->toArray();
 
-		if(!$disabled)
+		if ( !$disabled)
 		{
 			foreach((new UserAddress)->getColumns() as $column)
 			{
