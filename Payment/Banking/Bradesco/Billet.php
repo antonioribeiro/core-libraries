@@ -1,6 +1,6 @@
-<?php
+<?php namespace Library\Payment\Banking\Bradesco;
 
-class Bradesco {
+class Billet {
 	public $dias_de_prazo_para_pagamento;
 	public $taxa_boleto;
 	public $data_venc; 
@@ -124,22 +124,25 @@ class Bradesco {
 	}
 
 
-	function fbarcode($valor){
+	function fbarcode($valor, $assetsPath = '') 
+	{
+
+	$pBar = "$assetsPath/img/p.png";
 
 	$fino = 1 ;
 	$largo = 3 ;
 	$altura = 50 ;
+	$barcodes[0] = "00110" ;
+	$barcodes[1] = "10001" ;
+	$barcodes[2] = "01001" ;
+	$barcodes[3] = "11000" ;
+	$barcodes[4] = "00101" ;
+	$barcodes[5] = "10100" ;
+	$barcodes[6] = "01100" ;
+	$barcodes[7] = "00011" ;
+	$barcodes[8] = "10010" ;
+	$barcodes[9] = "01010" ;
 
-	  $barcodes[0] = "00110" ;
-	  $barcodes[1] = "10001" ;
-	  $barcodes[2] = "01001" ;
-	  $barcodes[3] = "11000" ;
-	  $barcodes[4] = "00101" ;
-	  $barcodes[5] = "10100" ;
-	  $barcodes[6] = "01100" ;
-	  $barcodes[7] = "00011" ;
-	  $barcodes[8] = "10010" ;
-	  $barcodes[9] = "01010" ;
 	  for($f1=9;$f1>=0;$f1--){ 
 		for($f2=9;$f2>=0;$f2--){  
 		  $f = ($f1 * 10) + $f2 ;
@@ -156,9 +159,9 @@ class Bradesco {
 
 
 	//Guarda inicial
-	?><img src=assets/img/p.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+	?><img src=<?php echo $pBar;?> width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
 	src=assets/img/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
-	src=assets/img/p.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+	src=<?php echo $pBar;?> width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
 	src=assets/img/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
 	<?php
 	$texto = $valor ;
@@ -178,7 +181,7 @@ class Bradesco {
 		  $f1 = $largo ;
 		}
 	?>
-		src=assets/img/p.png width=<?php echo $f1?> height=<?php echo $altura?> border=0><img 
+		src=<?php echo $pBar;?> width=<?php echo $f1?> height=<?php echo $altura?> border=0><img 
 	<?php
 		if (substr($f,$i,1) == "0") {
 		  $f2 = $fino ;
@@ -193,9 +196,9 @@ class Bradesco {
 
 	// Draw guarda final
 	?>
-	src=assets/img/p.png width=<?php echo $largo?> height=<?php echo $altura?> border=0><img 
+	src=<?php echo $pBar;?> width=<?php echo $largo?> height=<?php echo $altura?> border=0><img 
 	src=assets/img/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
-	src=assets/img/p.png width=<?php echo 1?> height=<?php echo $altura?> border=0> 
+	src=<?php echo $pBar;?> width=<?php echo 1?> height=<?php echo $altura?> border=0> 
 	  <?php
 	} //Fim da função
 
@@ -426,6 +429,6 @@ class Bradesco {
 		$this->dadosboleto["nosso_numero"] = $this->nossonumero;
 		$this->dadosboleto["codigo_banco_com_dv"] = $this->codigo_banco_com_dv;
 
-		return View::make($this->viewName, array('dadosboleto' => $this->dadosboleto, 'billetObject' => $this));
+		return \View::make($this->viewName, array('dadosboleto' => $this->dadosboleto, 'billetObject' => $this));
 	}
 }
