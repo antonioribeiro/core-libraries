@@ -129,4 +129,16 @@ class BaseModel extends \Eloquent {
 	{
 		return $this->safeColumns();
 	}
+
+	public function toJsonCamel()
+	{
+		$array = $this->toArray();
+
+		foreach($array as $key => $value)
+		{
+			$return[camel_case($key)] = $value;
+		}
+
+		return $return;
+	}
 }

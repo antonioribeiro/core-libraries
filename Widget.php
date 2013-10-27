@@ -482,7 +482,7 @@ class Widget {
 
 			$line['value'] = self::process($line['value'], $model);
 
-			if ($line['icon']) 
+			if (isset($line['icon']) and $line['icon'])
 			{
 				list($iconType, $iconId, $iconImage) = $line['icon'];
 			} else {

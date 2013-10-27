@@ -11,6 +11,15 @@ Class Tools {
 		return (str_replace(array("\n"," ","array"), array("<br>","&nbsp;","&nbsp;<i>array</i>"), var_export($v,true))."<br>"); 
 	} 
 
+	public static function getSubdomain()
+	{
+		$domain = Config::get('app.domain');
+
+		preg_match("/^(.*)(\.$domain)$/", Request::getHost(), $parts);
+
+		return $parts[1];
+	}
+
 	public static function trace($die = false)
 	{ 
 		$bt=debug_backtrace();
