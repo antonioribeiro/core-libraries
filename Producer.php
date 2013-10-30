@@ -204,7 +204,7 @@ class Producer {
 		return Producer::generateArray(
 											PaymentOption::where('payment_service_id', PaymentService::where('name', 'Cielo')->first()->id)->get()
 											, $firstItem
-											, 'name'
+											, 'id'
 											, 'name'
 										);
 

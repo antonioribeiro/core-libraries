@@ -379,11 +379,11 @@ class Transacao
      */
     public function setValor($valor)
     {
+        $valor = number_format ( (float) $valor, 2, '' , '' );
+
         if (preg_match('/([[:alpha:]]|[[:punct:]]|[[:space:]])/', $valor)) {
             throw new Exception('Valor inválido.');
         }
-
-        $valor = number_format ( (float) $valor, 2, '' , '' );
 
         $this->valorPedido = substr($valor, 0, 12);
 
