@@ -155,7 +155,12 @@ class Cielo {
 		$this->setUp();
 		$this->setRequest( $this->client->iniciaTransacao($this->transaction, $this->card, $this->configuration->returnUrl) );
 
-		return ! $this->hasErrors();
+		return ! $this->hasErrors() && $this->authorized();
+	}
+
+	public function authorized()
+	{
+		return $this->responseCode->success;
 	}
 
 	public function requestToken()
