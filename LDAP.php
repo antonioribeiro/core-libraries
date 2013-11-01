@@ -9,6 +9,12 @@ class LDAP {
 
 	public static function authenticate($username, $password)
 	{
+		if(empty($username) or empty($password))
+		{
+			Log::error('Error binding to LDAP: username or password empty');
+			return false;
+		}
+
 		$ldapRdn = static::getLdapRdn($username);
 
 		Log::info($ldapRdn);
