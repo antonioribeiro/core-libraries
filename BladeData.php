@@ -47,7 +47,7 @@ class BladeData {
 		}
 
 		BladeData::put('modelCaption', BladeData::get('model')->caption);
-		BladeData::put('mainRoute', BladeData::get('model')->route);
+		BladeData::put('mainRoute', BladeData::get('model')->getRoute());
 		BladeData::put('rootRoute', "/".BladeData::get('mainRoute'));
 		BladeData::put('formName', BladeData::get('mainRoute').'Form');
 		BladeData::put('modelClass', BladeData::get('model')->class);
@@ -62,7 +62,7 @@ class BladeData {
 		if (BladeData::get('model')->id !== NULL) {
 			BladeData::put('editUrl', URL::route(BladeData::get('mainRoute').'.edit',BladeData::get('model')->id));
 			BladeData::put('updateUrl', BladeData::get('rootRoute').'/update/'.(BladeData::get('model')->id ? BladeData::get('model')->id : 0));
-			BladeData::put('deleteUrl', URL::route(BladeData::get('mainRoute').'.delete',BladeData::get('model')->id));
+			BladeData::put('deleteUrl', URL::route(BladeData::get('mainRoute').'.destroy',BladeData::get('model')->id));
 			BladeData::put('showUrl', URL::route(BladeData::get('mainRoute').'.show',BladeData::get('model')->id));
 		}
 

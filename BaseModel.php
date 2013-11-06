@@ -141,4 +141,10 @@ class BaseModel extends \Eloquent {
 
 		return $return;
 	}
+
+	public function getRoute()
+	{
+		return $this->route;
+	}
+
 }
