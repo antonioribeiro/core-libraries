@@ -93,13 +93,36 @@ class Cielo {
 	{
 		$this->card = new Cartao();
 
-		$this->card->setBandeira( $this->data->cardBrand );
-		$this->card->setCartao( $this->data->cardNumber );
-		$this->card->setCodigoSeguranca( $this->data->cardSecurityCode );
-		$this->card->setIndicador( $this->data->cardSecurityCodeInfo );
-		$this->card->setNomePortador( $this->data->cardPrintedName );
-		$this->card->setValidade( $this->data->cardExpirationDate );		
-		$this->card->setToken( $this->data->cardToken );		
+		if( ! is_null($this->data->cardBrand))
+		{
+			$this->card->setBandeira( $this->data->cardBrand );
+		}
+
+		if( ! is_null($this->data->cardNumber))
+		{
+			$this->card->setCartao( $this->data->cardNumber );
+		}
+
+		if ( ! is_null($this->data->cardSecurityCode)) 
+		{
+			$this->card->setCodigoSeguranca( $this->data->cardSecurityCode );
+			$this->card->setIndicador( $this->data->cardSecurityCodeInfo );
+		}
+
+		if ( ! is_null($this->data->cardPrintedName)) 
+		{
+			$this->card->setNomePortador( $this->data->cardPrintedName );
+		}
+
+		if ( ! is_null($this->data->cardExpirationDate)) 
+		{
+			$this->card->setValidade( $this->convertExpirationDate( $this->data->cardExpirationDate ) );
+		}
+
+		if ( ! is_null($this->data->cardToken)) 
+		{
+			$this->card->setToken( $this->data->cardToken );
+		}
 	}
 
 	public function hasErrors()
@@ -132,7 +155,12 @@ class Cielo {
 		$this->setUp();
 		$this->setRequest( $this->client->iniciaTransacao($this->transaction, $this->card, $this->configuration->returnUrl) );
 
-		return ! $this->hasErrors();
+		return ! $this->hasErrors() && $this->authorized();
+	}
+
+	public function authorized()
+	{
+		return $this->responseCode->success;
 	}
 
 	public function requestToken()
@@ -179,8 +207,20 @@ class Cielo {
 
 		if( empty($this->data->transactionId) )
 		{
-			$this->data->transactionId = $this->response->tid;	
+			$this->data->transactionId = $this->response->tid;
 		}
+	}
+
+	private function convertExpirationDate( $date )
+	{
+		$parts = explode('/', $date);
+
+		if (count($parts) > 1)
+		{
+			$date = $parts[1].$parts[0];
+		}
+
+		return $date;
 	}
 
 }

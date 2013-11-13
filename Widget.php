@@ -482,7 +482,7 @@ class Widget {
 
 			$line['value'] = self::process($line['value'], $model);
 
-			if ($line['icon']) 
+			if (isset($line['icon']) and $line['icon'])
 			{
 				list($iconType, $iconId, $iconImage) = $line['icon'];
 			} else {
@@ -515,7 +515,7 @@ class Widget {
 
 				$r .= '</label>';
 			} else {
-				$r .= Form::$line['type']($line['column'], isset($line['value']) ? $line['value'] : null, $line['options']);	
+				$r .= Form::$line['type']($line['column'], isset($line['value']) ? $line['value'] : null, $line['options']);
 			}
 			
 			if ($iconImage) 

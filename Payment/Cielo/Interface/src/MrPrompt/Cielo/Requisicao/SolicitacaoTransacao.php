@@ -113,7 +113,12 @@ class SolicitacaoTransacao extends Requisicao
         $this->getEnvio()->addChild('url-retorno', $this->urlRetorno);
         $this->getEnvio()->addChild('autorizar', $this->transacao->getAutorizar());
         $this->getEnvio()->addChild('capturar', $this->transacao->getCapturar());
-        $this->getEnvio()->addChild('bin', substr($this->cartao->getCartao(), 0, 6));
+        
+        if($this->cartao->getCartao())
+        {
+            $this->getEnvio()->addChild('bin', substr($this->cartao->getCartao(), 0, 6));    
+        }
+        
         // $this->getEnvio()->addChild('campo-livre', '');
         $this->getEnvio()->addChild('gerar-token', 'false');
     }

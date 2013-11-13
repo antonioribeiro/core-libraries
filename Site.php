@@ -19,8 +19,8 @@ class Site {
 
 		if (Sentry::check()) 
 		{
-			$menu[] = ['caption' => 'Sua lista de desejos', 'url' => URL::route('profile.show', ActiveSession::user()->id), 'icon' => 'icon-heart'];
-			$menu[] = ['caption' => ActiveSession::user()->email, 'url' => URL::route('profile.show', ActiveSession::user()->id), 'icon' => 'icon-user'];
+			$menu[] = ['caption' => 'Lista de desejos', 'url' => URL::route('profile.show'), 'icon' => 'icon-heart'];
+			$menu[] = ['caption' => ActiveSession::user()->email, 'url' => URL::route('profile.show'), 'icon' => 'icon-user'];
 		} 
 		else 
 		{

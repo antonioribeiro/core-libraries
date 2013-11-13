@@ -198,4 +198,16 @@ class Producer {
 		return Producer::generateArray(SizeGroup::whereNotNull('id')->orderBy('id')->get(), $firstItem, 'id', 'name');
 
 	}
+
+	public static function cieloCardBrands($firstItem) {
+
+		return Producer::generateArray(
+											PaymentOption::where('payment_service_id', PaymentService::where('name', 'Cielo')->first()->id)->get()
+											, $firstItem
+											, 'id'
+											, 'name'
+										);
+
+	}
+
 }

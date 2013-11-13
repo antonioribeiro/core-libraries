@@ -172,4 +172,21 @@ class BaseModel extends \Eloquent {
 		return $columns;
 	}
 
+	public function toJsonCamel()
+	{
+		$array = $this->toArray();
+
+		foreach($array as $key => $value)
+		{
+			$return[camel_case($key)] = $value;
+		}
+
+		return $return;
+	}
+
+	public function getRoute()
+	{
+		return $this->route;
+	}
+
 }
