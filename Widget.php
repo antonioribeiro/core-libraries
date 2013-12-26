@@ -17,7 +17,7 @@ class Widget {
 			}
 		}
 
-		return View::make('site._partials.contentHeader')
+		return View::make('views.site._partials.contentHeader')
 						->with('bladeData', ['contentHeader' => $headers, 'contentHeaderTags' => $tags, 'contentHeaderIcon' => $icon, 'contentHeaderTools' => $tools, 'contentHeaderControls' => $controls]);
 	}
 

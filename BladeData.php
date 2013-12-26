@@ -72,7 +72,7 @@ class BladeData {
 			BladeData::put('indexUrl', URL::route(BladeData::get('parentRoute').'.index'));
 		}
 
-		BladeData::put('validateFirstAPIUrl', URL::to('api/validate/'.BladeData::get('model')->class));		
+		BladeData::put('validateFirstAPIUrl', URL::route('api/validate/'.BladeData::get('model')->class));		
 	}
 
 	public static function produceUserAddresses($user, $disabled, $enabled)

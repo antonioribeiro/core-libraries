@@ -54,9 +54,9 @@ class Image {
 
 	public static function url($picture) {
 		if (!isset($picture)) {
-			return URL::to('assets/img/no-picture.webp');
+			return URL::route('assets/img/no-picture.webp');
 		} else {
-			return URL::to('/').'/'.$picture->getFileName();
+			return URL::route('home').'/'.$picture->getFileName();
 		}
 	}
 
